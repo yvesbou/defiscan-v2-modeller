@@ -394,8 +394,26 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="mt-12 pt-6 border-t text-center text-sm text-muted-foreground">
-          <p>DeFiScan V2 Modeller • Data is not persisting</p>
+        <footer className="mt-12 pt-6 border-t">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">
+              DeFiScan V2 Modeller • Data stored in localStorage
+            </p>
+            <Button
+              onClick={() => {
+                localStorage.removeItem(STORAGE_KEY_MATRIX);
+                localStorage.removeItem(STORAGE_KEY_TABLES);
+                localStorage.removeItem(STORAGE_KEY_RULES);
+                localStorage.removeItem(STORAGE_KEY_LIKELIHOOD_MAPPING);
+                window.location.reload();
+              }}
+              variant="outline"
+              size="sm"
+              className="text-xs"
+            >
+              Reset to Default Data
+            </Button>
+          </div>
         </footer>
       </div>
     </main>
