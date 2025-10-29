@@ -74,7 +74,6 @@ export interface LikelihoodMappingRule {
   likelihood: Likelihood;
   votingMinDelayDays: number;
   votingMinVoters: number;
-  description: string;
 }
 
 export interface GovernanceLikelihoodConfiguration {

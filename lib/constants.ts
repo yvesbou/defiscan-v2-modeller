@@ -318,28 +318,21 @@ const DEFAULT_VOTING_LIKELIHOOD_RULES: LikelihoodMappingRule[] = [
     likelihood: "Mitigated",
     votingMinDelayDays: 7,
     votingMinVoters: 20,
-    description:
-      "Trustless Voting with total Delay ≥ 7 days and Consensus Threshold ≥ 20 voters",
   },
   {
     likelihood: "Low",
     votingMinDelayDays: 4,
     votingMinVoters: 10,
-    description:
-      "Trustless Voting with total Delay ≥ 4 days and Consensus Threshold ≥ 10 voters",
   },
   {
     likelihood: "Medium",
     votingMinDelayDays: 2,
     votingMinVoters: 5,
-    description:
-      "Trustless Voting with total Delay ≥ 2 days and Consensus Threshold ≥ 5 voters, OR Security Council, OR Multisig with Delay ≥ 7 days",
   },
   {
     likelihood: "High",
     votingMinDelayDays: 0,
     votingMinVoters: 0,
-    description: "Insignificant Voting control",
   },
 ];
 

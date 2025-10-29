@@ -57,7 +57,6 @@ export function LikelihoodMappingConfiguration({
                 <TableHead className="w-20">Likelihood</TableHead>
                 <TableHead className="w-32">Min Voting Delay (days)</TableHead>
                 <TableHead className="w-32">Min Required Voters</TableHead>
-                <TableHead className="flex-1">Description</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -90,15 +89,6 @@ export function LikelihoodMappingConfiguration({
                           'votingMinVoters',
                           parseInt(e.target.value) || 0
                         )
-                      }
-                      className="w-full text-xs"
-                    />
-                  </TableCell>
-                  <TableCell className="p-2">
-                    <Input
-                      value={rule.description}
-                      onChange={(e) =>
-                        handleVotingRuleChange(rule.likelihood, 'description', e.target.value)
                       }
                       className="w-full text-xs"
                     />
