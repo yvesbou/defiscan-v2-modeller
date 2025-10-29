@@ -9,6 +9,7 @@ import {
   GovernanceConfig,
   Likelihood,
   LikelihoodMappingRule,
+  GovernanceLikelihoodConfiguration,
 } from "./types"
 
 export function cn(...inputs: ClassValue[]) {
@@ -39,8 +40,11 @@ const LIKELIHOOD_ORDER: Record<Likelihood, number> = {
 
 export function calculateLikelihoodFromGovernance(
   governance: GovernanceConfig,
-  mappingRules: LikelihoodMappingRule[]
+  config: GovernanceLikelihoodConfiguration | LikelihoodMappingRule[]
 ): Likelihood {
+  // Handle both new GovernanceLikelihoodConfiguration and old LikelihoodMappingRule[]
+  const votingRules = Array.isArray(config) ? config : config.voting
+
   switch (governance.type) {
     case 'voting':
       // Check voting thresholds against mapping rules
@@ -48,8 +52,8 @@ export function calculateLikelihoodFromGovernance(
       const voters = governance.requiredVoters || 0
 
       // Find the highest likelihood that matches
-      for (let i = 0; i < mappingRules.length; i++) {
-        const rule = mappingRules[i]
+      for (let i = 0; i < votingRules.length; i++) {
+        const rule = votingRules[i]
         if (
           delayDays >= rule.votingMinDelayDays &&
           voters >= rule.votingMinVoters
@@ -60,14 +64,16 @@ export function calculateLikelihoodFromGovernance(
       return 'High' // Fallback
 
     case 'security_council':
-      return 'Medium'
+      return Array.isArray(config) ? 'Medium' : config.security_council
 
     case 'multisig_delay_7d':
-      return 'Medium'
+      return Array.isArray(config) ? 'Medium' : config.multisig_delay_7d
 
     case 'multisig':
+      return Array.isArray(config) ? 'High' : config.multisig
+
     case 'eoa':
-      return 'High'
+      return Array.isArray(config) ? 'High' : config.eoa
 
     default:
       return 'High'
@@ -110,9 +116,9 @@ export function calculateSeverityFromGovernance(
   impact: Impact,
   governance: GovernanceConfig,
   severityMatrix: Record<Impact, Record<Likelihood, Severity>>,
-  mappingRules: LikelihoodMappingRule[]
+  config: GovernanceLikelihoodConfiguration | LikelihoodMappingRule[]
 ): Severity {
-  const likelihood = calculateLikelihoodFromGovernance(governance, mappingRules)
+  const likelihood = calculateLikelihoodFromGovernance(governance, config)
   return severityMatrix[impact][likelihood]
 }
 

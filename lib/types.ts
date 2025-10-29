@@ -76,3 +76,11 @@ export interface LikelihoodMappingRule {
   votingMinVoters: number;
   description: string;
 }
+
+export interface GovernanceLikelihoodConfiguration {
+  voting: LikelihoodMappingRule[];
+  eoa: Likelihood;
+  multisig: Likelihood;
+  multisig_delay_7d: Likelihood;
+  security_council: Likelihood;
+}

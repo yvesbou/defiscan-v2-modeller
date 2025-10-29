@@ -9,20 +9,20 @@ import {
   Severity,
   GovernanceConfig,
   GovernanceType,
-  LikelihoodMappingRule,
+  GovernanceLikelihoodConfiguration,
 } from '@/lib/types'
 import { IMPACTS, LIKELIHOODS, SEVERITIES } from '@/lib/constants'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { cn, calculateSeverityFromGovernance } from '@/lib/utils'
+import { cn, calculateSeverityFromGovernance, calculateLikelihoodFromGovernance } from '@/lib/utils'
 import { calculateRating } from '@/lib/utils'
 
 interface FunctionClassificationTableProps {
   tableData: FunctionTableType
   severityMatrix: Record<Impact, Record<Likelihood, Severity>>
-  likelihoodMappingRules: LikelihoodMappingRule[]
+  governanceLikelihoodConfig: GovernanceLikelihoodConfiguration
   onTableChange: (table: FunctionTableType) => void
 }
 
@@ -71,7 +71,7 @@ const getSeverityColor = (severity: Severity): string => {
 export function FunctionClassificationTable({
   tableData,
   severityMatrix,
-  likelihoodMappingRules,
+  governanceLikelihoodConfig,
   onTableChange,
 }: FunctionClassificationTableProps) {
   const handleTitleChange = (newTitle: string) => {
@@ -102,7 +102,7 @@ export function FunctionClassificationTable({
             impact,
             governance,
             severityMatrix,
-            likelihoodMappingRules
+            governanceLikelihoodConfig
           )
         }
 
@@ -133,7 +133,7 @@ export function FunctionClassificationTable({
         'Low',
         defaultGovernance,
         severityMatrix,
-        likelihoodMappingRules
+        governanceLikelihoodConfig
       ),
     }
     onTableChange({ ...tableData, entries: [...tableData.entries, newEntry] })
@@ -175,6 +175,7 @@ export function FunctionClassificationTable({
               <TableHead className="w-1/4">Function</TableHead>
               <TableHead className="w-20">Impact</TableHead>
               <TableHead className="w-40">Governance Type</TableHead>
+              <TableHead className="w-24">Likelihood</TableHead>
               <TableHead className="w-32">Severity Score</TableHead>
               <TableHead className="w-20 text-center">Action</TableHead>
             </TableRow>
@@ -226,6 +227,9 @@ export function FunctionClassificationTable({
                         </option>
                       ))}
                     </Select>
+                  </TableCell>
+                  <TableCell className="p-2 text-xs font-semibold">
+                    {calculateLikelihoodFromGovernance(governance, governanceLikelihoodConfig)}
                   </TableCell>
                   <TableCell className="p-2">
                     <Select

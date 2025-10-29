@@ -7,6 +7,7 @@ import {
   RatingRule,
   StageEntry,
   LikelihoodMappingRule,
+  GovernanceLikelihoodConfiguration,
 } from "./types";
 
 // 2D structure for fast lookups: severityMatrix[impact][likelihood]
@@ -311,8 +312,8 @@ export const STAGE_ENTRIES: StageEntry[] = [
   { id: "11", name: "Pendle", stage: "Stage 0" },
 ];
 
-// Likelihood mapping rules for governance types
-export const DEFAULT_LIKELIHOOD_MAPPING_RULES: LikelihoodMappingRule[] = [
+// Likelihood mapping rules for voting governance type
+const DEFAULT_VOTING_LIKELIHOOD_RULES: LikelihoodMappingRule[] = [
   {
     likelihood: "Mitigated",
     votingMinDelayDays: 7,
@@ -341,3 +342,15 @@ export const DEFAULT_LIKELIHOOD_MAPPING_RULES: LikelihoodMappingRule[] = [
     description: "Else (EOA or multisig without delay)",
   },
 ];
+
+// Governance likelihood configuration with default values for each governance type
+export const DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG: GovernanceLikelihoodConfiguration = {
+  voting: DEFAULT_VOTING_LIKELIHOOD_RULES,
+  eoa: "High",
+  multisig: "High",
+  multisig_delay_7d: "Medium",
+  security_council: "Medium",
+};
+
+// Backward compatibility export for voting rules only
+export const DEFAULT_LIKELIHOOD_MAPPING_RULES: LikelihoodMappingRule[] = DEFAULT_VOTING_LIKELIHOOD_RULES;
