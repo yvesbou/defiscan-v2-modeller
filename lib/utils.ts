@@ -42,42 +42,56 @@ export function calculateLikelihoodFromGovernance(
   governance: GovernanceConfig,
   config: GovernanceLikelihoodConfiguration | LikelihoodMappingRule[]
 ): Likelihood {
-  // Handle both new GovernanceLikelihoodConfiguration and old LikelihoodMappingRule[]
-  const votingRules = Array.isArray(config) ? config : config.voting
-
-  switch (governance.type) {
-    case 'voting':
-      // Check voting thresholds against mapping rules
-      const delayDays = governance.votingDelayDays || 0
-      const voters = governance.requiredVoters || 0
-
-      // Find the highest likelihood that matches
-      for (let i = 0; i < votingRules.length; i++) {
-        const rule = votingRules[i]
-        if (
-          delayDays >= rule.votingMinDelayDays &&
-          voters >= rule.votingMinVoters
-        ) {
-          return rule.likelihood
-        }
-      }
-      return 'High' // Fallback
-
-    case 'security_council':
-      return Array.isArray(config) ? 'Medium' : config.security_council
-
-    case 'multisig_delay_7d':
-      return Array.isArray(config) ? 'Medium' : config.multisig_delay_7d
-
-    case 'multisig':
-      return Array.isArray(config) ? 'High' : config.multisig
-
-    case 'eoa':
-      return Array.isArray(config) ? 'High' : config.eoa
-
-    default:
-      return 'High'
+  // Handle Dependency and Operator types
+  if (governance.functionType === 'Dependency' && !Array.isArray(config) && governance.name) {
+    return config.dependencies[governance.name] || 'High'
   }
+
+  if (governance.functionType === 'Operator' && !Array.isArray(config) && governance.name) {
+    return config.operators[governance.name] || 'High'
+  }
+
+  // Handle Admin type and legacy governance.type
+  if (governance.functionType === 'Admin' || governance.functionType === undefined) {
+    const governanceType = governance.governanceType || (governance as any).type
+    const votingRules = Array.isArray(config) ? config : config.voting
+
+    switch (governanceType) {
+      case 'voting':
+        // Check voting thresholds against mapping rules
+        const delayDays = governance.votingDelayDays || 0
+        const voters = governance.requiredVoters || 0
+
+        // Find the highest likelihood that matches
+        for (let i = 0; i < votingRules.length; i++) {
+          const rule = votingRules[i]
+          if (
+            delayDays >= rule.votingMinDelayDays &&
+            voters >= rule.votingMinVoters
+          ) {
+            return rule.likelihood
+          }
+        }
+        return 'High' // Fallback
+
+      case 'security_council':
+        return Array.isArray(config) ? 'Medium' : config.security_council
+
+      case 'multisig_delay_7d':
+        return Array.isArray(config) ? 'Medium' : config.multisig_delay_7d
+
+      case 'multisig':
+        return Array.isArray(config) ? 'High' : config.multisig
+
+      case 'eoa':
+        return Array.isArray(config) ? 'High' : config.eoa
+
+      default:
+        return 'High'
+    }
+  }
+
+  return 'High'
 }
 
 export function calculateRatingWithRules(

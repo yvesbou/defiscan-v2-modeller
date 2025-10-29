@@ -34,16 +34,33 @@ function migrateTableData(tables: any[]): FunctionTableType[] {
   return tables.map((table: any) => ({
     ...table,
     entries: table.entries.map((entry: any) => {
-      // If entry already has governance with a type, keep it as is
-      if (entry.governance && entry.governance.type) {
+      // If entry already has governance with functionType, keep it as is
+      if (entry.governance && entry.governance.functionType) {
         return entry;
       }
-      // Otherwise, initialize with default governance (eoa)
+      // If entry has governance with type (old format), convert to new format
+      if (
+        entry.governance &&
+        (entry.governance.type || (entry.governance as any).governanceType)
+      ) {
+        return {
+          ...entry,
+          governance: {
+            functionType: "Admin" as const,
+            governanceType:
+              entry.governance.type || (entry.governance as any).governanceType,
+            votingDelayDays: entry.governance.votingDelayDays,
+            requiredVoters: entry.governance.requiredVoters,
+          },
+        };
+      }
+      // Otherwise, initialize with default governance (Admin with eoa)
       const { likelihood, ...entryWithoutLikelihood } = entry;
       return {
         ...entryWithoutLikelihood,
         governance: {
-          type: 'eoa' as const,
+          functionType: "Admin" as const,
+          governanceType: "eoa" as const,
         },
       };
     }),
@@ -51,20 +68,29 @@ function migrateTableData(tables: any[]): FunctionTableType[] {
 }
 
 // Migration function to convert old LikelihoodMappingRule[] to new GovernanceLikelihoodConfiguration
-function migrateGovernanceLikelihoodConfig(data: any): GovernanceLikelihoodConfiguration {
-  // If it's already in the new format (has voting property), return as is
-  if (data && typeof data === 'object' && 'voting' in data) {
-    return data as GovernanceLikelihoodConfiguration;
+function migrateGovernanceLikelihoodConfig(
+  data: any
+): GovernanceLikelihoodConfiguration {
+  // If it's already in the new format (has voting property), ensure dependencies and operators are present
+  if (data && typeof data === "object" && "voting" in data) {
+    return {
+      ...DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG,
+      ...data,
+      dependencies: data.dependencies || {},
+      operators: data.operators || {},
+    };
   }
 
   // If it's old format (array of LikelihoodMappingRule), convert it
   if (Array.isArray(data)) {
     return {
       voting: data,
-      eoa: 'High',
-      multisig: 'High',
-      multisig_delay_7d: 'Medium',
-      security_council: 'Medium',
+      eoa: "High",
+      multisig: "High",
+      multisig_delay_7d: "Medium",
+      security_council: "Medium",
+      dependencies: {},
+      operators: {},
     };
   }
 
@@ -77,8 +103,12 @@ export default function Home() {
     Record<Impact, Record<Likelihood, Severity>>
   >(DEFAULT_SEVERITY_MATRIX_2D);
   const [functionTables, setFunctionTables] = useState<FunctionTableType[]>([]);
-  const [ratingRules, setRatingRules] = useState<RatingRule[]>(DEFAULT_RATING_RULES);
-  const [governanceLikelihoodConfig, setGovernanceLikelihoodConfig] = useState<GovernanceLikelihoodConfiguration>(DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG);
+  const [ratingRules, setRatingRules] =
+    useState<RatingRule[]>(DEFAULT_RATING_RULES);
+  const [governanceLikelihoodConfig, setGovernanceLikelihoodConfig] =
+    useState<GovernanceLikelihoodConfiguration>(
+      DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG
+    );
   const [mounted, setMounted] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
     ratingRules: true,
@@ -138,14 +168,17 @@ export default function Home() {
         const parsedRules = JSON.parse(savedRules);
         // Validate that we have the new format with the empty AAA row
         const hasEmptyAAARow = parsedRules.some(
-          (rule: RatingRule) => rule.rating === "AAA" && rule.severity === "" && rule.impact === ""
+          (rule: RatingRule) =>
+            rule.rating === "AAA" && rule.severity === "" && rule.impact === ""
         );
 
         if (hasEmptyAAARow) {
           setRatingRules(parsedRules);
         } else {
           // Old format detected, reset to defaults
-          console.warn("Old rating rules format detected, resetting to defaults");
+          console.warn(
+            "Old rating rules format detected, resetting to defaults"
+          );
           localStorage.removeItem(STORAGE_KEY_RULES);
         }
       } catch (e) {
@@ -154,7 +187,9 @@ export default function Home() {
       }
     }
 
-    const savedLikelihoodMapping = localStorage.getItem(STORAGE_KEY_LIKELIHOOD_MAPPING);
+    const savedLikelihoodMapping = localStorage.getItem(
+      STORAGE_KEY_LIKELIHOOD_MAPPING
+    );
     if (savedLikelihoodMapping) {
       try {
         const parsedData = JSON.parse(savedLikelihoodMapping);
@@ -186,7 +221,10 @@ export default function Home() {
 
   useEffect(() => {
     if (!mounted) return;
-    localStorage.setItem(STORAGE_KEY_LIKELIHOOD_MAPPING, JSON.stringify(governanceLikelihoodConfig));
+    localStorage.setItem(
+      STORAGE_KEY_LIKELIHOOD_MAPPING,
+      JSON.stringify(governanceLikelihoodConfig)
+    );
   }, [governanceLikelihoodConfig, mounted]);
 
   // Update all function entries when severity matrix or likelihood mapping changes
@@ -264,11 +302,15 @@ export default function Home() {
         {/* Editable Rating Rules - Collapsible */}
         <div className="border rounded-lg p-6 mb-6">
           <button
-            onClick={() => toggleSection('ratingRules')}
+            onClick={() => toggleSection("ratingRules")}
             className="flex items-center justify-between w-full cursor-pointer hover:opacity-80"
           >
-            <h2 className="text-xl font-semibold">Rating Scale Configuration</h2>
-            <span className="text-2xl font-bold">{expandedSections.ratingRules ? '−' : '+'}</span>
+            <h2 className="text-xl font-semibold">
+              Rating Scale Configuration
+            </h2>
+            <span className="text-2xl font-bold">
+              {expandedSections.ratingRules ? "−" : "+"}
+            </span>
           </button>
           {expandedSections.ratingRules && (
             <div className="mt-4">
@@ -283,11 +325,13 @@ export default function Home() {
         {/* Severity Ratings Matrix - Collapsible */}
         <div className="border rounded-lg p-6 mb-6">
           <button
-            onClick={() => toggleSection('severityMatrix')}
+            onClick={() => toggleSection("severityMatrix")}
             className="flex items-center justify-between w-full cursor-pointer hover:opacity-80"
           >
             <h2 className="text-xl font-semibold">Severity Ratings Matrix</h2>
-            <span className="text-2xl font-bold">{expandedSections.severityMatrix ? '−' : '+'}</span>
+            <span className="text-2xl font-bold">
+              {expandedSections.severityMatrix ? "−" : "+"}
+            </span>
           </button>
           {expandedSections.severityMatrix && (
             <div className="mt-4">
@@ -302,11 +346,13 @@ export default function Home() {
         {/* Likelihood Mapping Configuration - Collapsible */}
         <div className="border rounded-lg p-6 mb-6">
           <button
-            onClick={() => toggleSection('likelihoodMapping')}
+            onClick={() => toggleSection("likelihoodMapping")}
             className="flex items-center justify-between w-full cursor-pointer hover:opacity-80"
           >
-            <h2 className="text-xl font-semibold">Governance Likelihood Mapping</h2>
-            <span className="text-2xl font-bold">{expandedSections.likelihoodMapping ? '−' : '+'}</span>
+            <h2 className="text-xl font-semibold">Likelihood Mapping</h2>
+            <span className="text-2xl font-bold">
+              {expandedSections.likelihoodMapping ? "−" : "+"}
+            </span>
           </button>
           {expandedSections.likelihoodMapping && (
             <div className="mt-4">

@@ -344,6 +344,8 @@ export const DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG: GovernanceLikelihoodConfigura
     multisig: "High",
     multisig_delay_7d: "Medium",
     security_council: "Medium",
+    dependencies: {},
+    operators: {},
   };
 
 // Backward compatibility export for voting rules only

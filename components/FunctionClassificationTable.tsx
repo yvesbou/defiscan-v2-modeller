@@ -9,6 +9,7 @@ import {
   Severity,
   GovernanceConfig,
   GovernanceType,
+  FunctionType,
   GovernanceLikelihoodConfiguration,
 } from '@/lib/types'
 import { IMPACTS, LIKELIHOODS, SEVERITIES } from '@/lib/constants'
@@ -85,9 +86,11 @@ export function FunctionClassificationTable({
         let governance: GovernanceConfig = entry.governance
         if (updates.governance) {
           governance = {
-            type: updates.governance.type ?? entry.governance.type,
+            functionType: updates.governance.functionType ?? entry.governance.functionType,
+            governanceType: updates.governance.governanceType ?? entry.governance.governanceType,
             votingDelayDays: updates.governance.votingDelayDays ?? entry.governance.votingDelayDays,
             requiredVoters: updates.governance.requiredVoters ?? entry.governance.requiredVoters,
+            name: updates.governance.name ?? entry.governance.name,
           }
         }
 
@@ -122,7 +125,8 @@ export function FunctionClassificationTable({
 
   const handleAddRow = () => {
     const defaultGovernance: GovernanceConfig = {
-      type: 'eoa',
+      functionType: 'Admin',
+      governanceType: 'eoa',
     }
     const newEntry: FunctionClassificationEntry = {
       id: Date.now().toString(),
@@ -174,7 +178,7 @@ export function FunctionClassificationTable({
             <TableRow>
               <TableHead className="w-1/4">Function</TableHead>
               <TableHead className="w-20">Impact</TableHead>
-              <TableHead className="w-40">Governance Type</TableHead>
+              <TableHead className="w-32">Type</TableHead>
               <TableHead className="w-24">Likelihood</TableHead>
               <TableHead className="w-32">Severity Score</TableHead>
               <TableHead className="w-20 text-center">Action</TableHead>
@@ -183,7 +187,7 @@ export function FunctionClassificationTable({
           <TableBody>
             {tableData.entries.map((entry) => {
               // Ensure entry has governance, otherwise use default
-              const governance = entry.governance || { type: 'eoa' as const };
+              const governance = entry.governance || { functionType: 'Admin' as const, governanceType: 'eoa' as const };
 
               return (
               <React.Fragment key={entry.id}>
@@ -213,19 +217,21 @@ export function FunctionClassificationTable({
                   </TableCell>
                   <TableCell className="p-2">
                     <Select
-                      value={governance.type}
+                      value={governance.functionType || 'Admin'}
                       onChange={(e) =>
                         handleEntryChange(entry.id, {
-                          governance: { type: e.target.value as GovernanceType },
+                          governance: {
+                            functionType: e.target.value as FunctionType,
+                            governanceType: 'eoa',
+                            name: '',
+                          },
                         })
                       }
                       className="w-full h-8 text-xs"
                     >
-                      {GOVERNANCE_TYPES.map((type) => (
-                        <option key={type} value={type}>
-                          {getGovernanceTypeLabel(type)}
-                        </option>
-                      ))}
+                      <option value="Admin">Admin</option>
+                      <option value="Dependency">Dependency</option>
+                      <option value="Operator">Operator</option>
                     </Select>
                   </TableCell>
                   <TableCell className="p-2 text-xs font-semibold">
@@ -260,47 +266,126 @@ export function FunctionClassificationTable({
                     </Button>
                   </TableCell>
                 </TableRow>
-                {/* Voting governance - show additional fields */}
-                {governance.type === 'voting' && (
-                  <TableRow>
-                    <TableCell colSpan={5} className="p-2 bg-muted/50">
-                      <div className="flex gap-4 items-end">
-                        <div className="flex items-center gap-2">
-                          <label className="text-xs font-medium">Voting Delay (days):</label>
-                          <Input
-                            type="number"
-                            min="0"
-                            value={governance.votingDelayDays ?? 0}
+                {/* Admin governance - show governance type and voting fields */}
+                {governance.functionType === 'Admin' && (
+                  <>
+                    <TableRow>
+                      <TableCell colSpan={5} className="p-2 bg-muted/50">
+                        <div className="flex gap-4 items-end">
+                          <label className="text-xs font-medium">Governance Type:</label>
+                          <Select
+                            value={governance.governanceType || 'eoa'}
                             onChange={(e) =>
                               handleEntryChange(entry.id, {
                                 governance: {
-                                  type: governance.type,
-                                  votingDelayDays: parseInt(e.target.value) || 0,
+                                  functionType: 'Admin',
+                                  governanceType: e.target.value as GovernanceType,
+                                  votingDelayDays: governance.votingDelayDays,
                                   requiredVoters: governance.requiredVoters,
                                 },
                               })
                             }
-                            className="w-20 h-8 text-xs"
-                          />
+                            className="w-full max-w-xs h-8 text-xs"
+                          >
+                            {GOVERNANCE_TYPES.map((type) => (
+                              <option key={type} value={type}>
+                                {getGovernanceTypeLabel(type)}
+                              </option>
+                            ))}
+                          </Select>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-xs font-medium">Required Voters:</label>
-                          <Input
-                            type="number"
-                            min="0"
-                            value={governance.requiredVoters ?? 0}
-                            onChange={(e) =>
-                              handleEntryChange(entry.id, {
-                                governance: {
-                                  type: governance.type,
-                                  votingDelayDays: governance.votingDelayDays,
-                                  requiredVoters: parseInt(e.target.value) || 0,
-                                },
-                              })
-                            }
-                            className="w-20 h-8 text-xs"
-                          />
-                        </div>
+                      </TableCell>
+                    </TableRow>
+                    {governance.governanceType === 'voting' && (
+                      <TableRow>
+                        <TableCell colSpan={5} className="p-2 bg-muted/50">
+                          <div className="flex gap-4 items-end">
+                            <div className="flex items-center gap-2">
+                              <label className="text-xs font-medium">Voting Delay (days):</label>
+                              <Input
+                                type="number"
+                                min="0"
+                                value={governance.votingDelayDays ?? 0}
+                                onChange={(e) =>
+                                  handleEntryChange(entry.id, {
+                                    governance: {
+                                      functionType: 'Admin',
+                                      governanceType: 'voting',
+                                      votingDelayDays: parseInt(e.target.value) || 0,
+                                      requiredVoters: governance.requiredVoters,
+                                    },
+                                  })
+                                }
+                                className="w-20 h-8 text-xs"
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <label className="text-xs font-medium">Required Voters:</label>
+                              <Input
+                                type="number"
+                                min="0"
+                                value={governance.requiredVoters ?? 0}
+                                onChange={(e) =>
+                                  handleEntryChange(entry.id, {
+                                    governance: {
+                                      functionType: 'Admin',
+                                      governanceType: 'voting',
+                                      votingDelayDays: governance.votingDelayDays,
+                                      requiredVoters: parseInt(e.target.value) || 0,
+                                    },
+                                  })
+                                }
+                                className="w-20 h-8 text-xs"
+                              />
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </>
+                )}
+                {/* Dependency - show name input */}
+                {governance.functionType === 'Dependency' && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="p-2 bg-muted/50">
+                      <div className="flex items-center gap-2">
+                        <label className="text-xs font-medium">Dependency Name:</label>
+                        <Input
+                          value={governance.name || ''}
+                          onChange={(e) =>
+                            handleEntryChange(entry.id, {
+                              governance: {
+                                functionType: 'Dependency',
+                                name: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="e.g., Chainlink, AAVE"
+                          className="w-40 h-8 text-xs"
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+                {/* Operator - show name input */}
+                {governance.functionType === 'Operator' && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="p-2 bg-muted/50">
+                      <div className="flex items-center gap-2">
+                        <label className="text-xs font-medium">Operator Name:</label>
+                        <Input
+                          value={governance.name || ''}
+                          onChange={(e) =>
+                            handleEntryChange(entry.id, {
+                              governance: {
+                                functionType: 'Operator',
+                                name: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="e.g., Treasury, DAO"
+                          className="w-40 h-8 text-xs"
+                        />
                       </div>
                     </TableCell>
                   </TableRow>

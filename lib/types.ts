@@ -64,10 +64,16 @@ export type GovernanceType =
   | "eoa"
   | "multisig";
 
+export type FunctionType = "Admin" | "Dependency" | "Operator";
+
 export interface GovernanceConfig {
-  type: GovernanceType;
+  functionType: FunctionType;
+  // For Admin type
+  governanceType?: GovernanceType;
   votingDelayDays?: number;
   requiredVoters?: number;
+  // For Dependency/Operator types
+  name?: string;
 }
 
 export interface LikelihoodMappingRule {
@@ -82,4 +88,6 @@ export interface GovernanceLikelihoodConfiguration {
   multisig: Likelihood;
   multisig_delay_7d: Likelihood;
   security_council: Likelihood;
+  dependencies: Record<string, Likelihood>;
+  operators: Record<string, Likelihood>;
 }
