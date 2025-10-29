@@ -80,6 +80,18 @@ export default function Home() {
   const [ratingRules, setRatingRules] = useState<RatingRule[]>(DEFAULT_RATING_RULES);
   const [governanceLikelihoodConfig, setGovernanceLikelihoodConfig] = useState<GovernanceLikelihoodConfiguration>(DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG);
   const [mounted, setMounted] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({
+    ratingRules: true,
+    severityMatrix: true,
+    likelihoodMapping: true,
+  });
+
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -249,23 +261,62 @@ export default function Home() {
           likelihoodMappingRules={governanceLikelihoodConfig.voting}
         />
 
-        {/* Severity Ratings Matrix */}
-        <SeverityRatingsTable
-          matrix={severityMatrix}
-          onMatrixChange={setSeverityMatrix}
-        />
+        {/* Editable Rating Rules - Collapsible */}
+        <div className="border rounded-lg p-6 mb-6">
+          <button
+            onClick={() => toggleSection('ratingRules')}
+            className="flex items-center justify-between w-full cursor-pointer hover:opacity-80"
+          >
+            <h2 className="text-xl font-semibold">Rating Scale Configuration</h2>
+            <span className="text-2xl font-bold">{expandedSections.ratingRules ? '−' : '+'}</span>
+          </button>
+          {expandedSections.ratingRules && (
+            <div className="mt-4">
+              <EditableRatingRules
+                rules={ratingRules}
+                onRulesChange={setRatingRules}
+              />
+            </div>
+          )}
+        </div>
 
-        {/* Editable Rating Rules */}
-        <EditableRatingRules
-          rules={ratingRules}
-          onRulesChange={setRatingRules}
-        />
+        {/* Severity Ratings Matrix - Collapsible */}
+        <div className="border rounded-lg p-6 mb-6">
+          <button
+            onClick={() => toggleSection('severityMatrix')}
+            className="flex items-center justify-between w-full cursor-pointer hover:opacity-80"
+          >
+            <h2 className="text-xl font-semibold">Severity Ratings Matrix</h2>
+            <span className="text-2xl font-bold">{expandedSections.severityMatrix ? '−' : '+'}</span>
+          </button>
+          {expandedSections.severityMatrix && (
+            <div className="mt-4">
+              <SeverityRatingsTable
+                matrix={severityMatrix}
+                onMatrixChange={setSeverityMatrix}
+              />
+            </div>
+          )}
+        </div>
 
-        {/* Likelihood Mapping Configuration */}
-        <LikelihoodMappingConfiguration
-          config={governanceLikelihoodConfig}
-          onConfigChange={setGovernanceLikelihoodConfig}
-        />
+        {/* Likelihood Mapping Configuration - Collapsible */}
+        <div className="border rounded-lg p-6 mb-6">
+          <button
+            onClick={() => toggleSection('likelihoodMapping')}
+            className="flex items-center justify-between w-full cursor-pointer hover:opacity-80"
+          >
+            <h2 className="text-xl font-semibold">Governance Likelihood Mapping</h2>
+            <span className="text-2xl font-bold">{expandedSections.likelihoodMapping ? '−' : '+'}</span>
+          </button>
+          {expandedSections.likelihoodMapping && (
+            <div className="mt-4">
+              <LikelihoodMappingConfiguration
+                config={governanceLikelihoodConfig}
+                onConfigChange={setGovernanceLikelihoodConfig}
+              />
+            </div>
+          )}
+        </div>
 
         {/* Projects */}
         <div className="mt-8">
