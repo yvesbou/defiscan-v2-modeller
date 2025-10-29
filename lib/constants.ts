@@ -339,18 +339,20 @@ const DEFAULT_VOTING_LIKELIHOOD_RULES: LikelihoodMappingRule[] = [
     likelihood: "High",
     votingMinDelayDays: 0,
     votingMinVoters: 0,
-    description: "Else (EOA or multisig without delay)",
+    description: "Insignificant Voting control",
   },
 ];
 
 // Governance likelihood configuration with default values for each governance type
-export const DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG: GovernanceLikelihoodConfiguration = {
-  voting: DEFAULT_VOTING_LIKELIHOOD_RULES,
-  eoa: "High",
-  multisig: "High",
-  multisig_delay_7d: "Medium",
-  security_council: "Medium",
-};
+export const DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG: GovernanceLikelihoodConfiguration =
+  {
+    voting: DEFAULT_VOTING_LIKELIHOOD_RULES,
+    eoa: "High",
+    multisig: "High",
+    multisig_delay_7d: "Medium",
+    security_council: "Medium",
+  };
 
 // Backward compatibility export for voting rules only
-export const DEFAULT_LIKELIHOOD_MAPPING_RULES: LikelihoodMappingRule[] = DEFAULT_VOTING_LIKELIHOOD_RULES;
+export const DEFAULT_LIKELIHOOD_MAPPING_RULES: LikelihoodMappingRule[] =
+  DEFAULT_VOTING_LIKELIHOOD_RULES;

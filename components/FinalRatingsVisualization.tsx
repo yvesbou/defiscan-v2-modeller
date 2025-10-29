@@ -79,7 +79,11 @@ export function FinalRatingsVisualization({
   const allEntries = functionTables.flatMap((table) => table.entries);
 
   // Calculate the final rating based on worst case
-  const finalRating = calculateRatingWithRules(allEntries, ratingRules, likelihoodMappingRules);
+  const finalRating = calculateRatingWithRules(
+    allEntries,
+    ratingRules,
+    likelihoodMappingRules
+  );
   const ratingInfo = FINAL_RATINGS.find((r) => r.rating === finalRating);
 
   const ratings: FinalRating[] = [
@@ -100,7 +104,11 @@ export function FinalRatingsVisualization({
   // Calculate per-project ratings
   const projectRatings = functionTables.map((table) => ({
     name: table.title || "Untitled Project",
-    rating: calculateRatingWithRules(table.entries, ratingRules, likelihoodMappingRules),
+    rating: calculateRatingWithRules(
+      table.entries,
+      ratingRules,
+      likelihoodMappingRules
+    ),
   }));
 
   // Group projects by rating
@@ -343,20 +351,6 @@ export function FinalRatingsVisualization({
               </div>
             );
           })()}
-        </div>
-      </div>
-
-      {/* Legend */}
-      <div className="grid grid-cols-2 gap-4 text-xs pt-8">
-        <div>
-          <p className="font-semibold mb-2">Rating Scale:</p>
-          <ul className="space-y-1">
-            {FINAL_RATINGS.map((r) => (
-              <li key={r.rating}>
-                <span className="font-bold">{r.rating}</span> - {r.scores}
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </div>
