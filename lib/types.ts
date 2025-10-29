@@ -48,3 +48,11 @@ export interface RatingRule {
   impact: Impact | "";
   description: string;
 }
+
+export type Stage = "Stage 2" | "Stage 1" | "Stage 0";
+
+export interface StageEntry {
+  id: string;
+  name: string;
+  stage: Stage;
+}

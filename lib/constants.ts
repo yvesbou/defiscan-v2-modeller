@@ -5,6 +5,7 @@ import {
   Likelihood,
   Severity,
   RatingRule,
+  StageEntry,
 } from "./types";
 
 // 2D structure for fast lookups: severityMatrix[impact][likelihood]
@@ -290,3 +291,21 @@ export function matrixFlatTo2D(
   }
   return matrix;
 }
+
+// Stage entries for protocol/project classification
+export const STAGE_ENTRIES: StageEntry[] = [
+  // Stage 2: Established protocols
+  { id: "1", name: "Liquity V1", stage: "Stage 2" },
+  { id: "2", name: "Uniswap V3", stage: "Stage 2" },
+  { id: "3", name: "Uniswap V2", stage: "Stage 2" },
+  // Stage 1: Growing protocols
+  { id: "4", name: "Ajna", stage: "Stage 1" },
+  { id: "5", name: "Aerodrome", stage: "Stage 1" },
+  { id: "6", name: "Velodrome", stage: "Stage 1" },
+  { id: "7", name: "Morpho", stage: "Stage 1" },
+  // Stage 0: Newer/experimental protocols
+  { id: "8", name: "Lido", stage: "Stage 0" },
+  { id: "9", name: "Aave V3", stage: "Stage 0" },
+  { id: "10", name: "Spark", stage: "Stage 0" },
+  { id: "11", name: "Pendle", stage: "Stage 0" },
+];
