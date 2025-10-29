@@ -122,11 +122,11 @@ export function FinalRatingsVisualization({
 
   return (
     <div className="border rounded-lg p-6 mb-6">
-      <h2 className="text-xl font-semibold mb-6">Final Risk Rating</h2>
+      <h2 className="text-xl font-semibold mb-6">Risk Ratings</h2>
 
       {/* Rating Scale Visualization */}
       <div className="mb-8">
-        <p className="text-sm font-semibold mb-4">Risk Scale</p>
+        <p className="text-sm font-semibold mb-4">Rating v2</p>
 
         {/* Main Risk Scale with Project Markers */}
         <div className="relative -mx-6 -mb-6">
@@ -236,7 +236,7 @@ export function FinalRatingsVisualization({
 
         {/* Stage Classification Bar */}
         <div className="mt-16">
-          <p className="text-sm font-semibold my-10">Protocol Stages</p>
+          <p className="text-sm font-semibold my-10">Rating v1</p>
 
           {(() => {
             // Group protocols by stage
