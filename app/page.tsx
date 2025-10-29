@@ -7,22 +7,48 @@ import {
   Likelihood,
   Severity,
   RatingRule,
+  LikelihoodMappingRule,
 } from "@/lib/types";
 import {
   DEFAULT_SEVERITY_MATRIX_2D,
   DEFAULT_SEVERITY_MATRIX_FLAT,
   DEFAULT_RATING_RULES,
+  DEFAULT_LIKELIHOOD_MAPPING_RULES,
 } from "@/lib/constants";
+import { calculateSeverityFromGovernance } from "@/lib/utils";
 import { SeverityRatingsTable } from "@/components/SeverityRatingsTable";
 import { FunctionClassificationTable } from "@/components/FunctionClassificationTable";
 import { FinalRatingsVisualization } from "@/components/FinalRatingsVisualization";
 import { EditableRatingRules } from "@/components/EditableRatingRules";
+import { LikelihoodMappingConfiguration } from "@/components/LikelihoodMappingConfiguration";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 
 const STORAGE_KEY_MATRIX = "defiscan_severity_matrix";
 const STORAGE_KEY_TABLES = "defiscan_function_tables";
 const STORAGE_KEY_RULES = "defiscan_rating_rules";
+const STORAGE_KEY_LIKELIHOOD_MAPPING = "defiscan_likelihood_mapping";
+
+// Migration function to convert old entries (with likelihood) to new entries (with governance)
+function migrateTableData(tables: any[]): FunctionTableType[] {
+  return tables.map((table: any) => ({
+    ...table,
+    entries: table.entries.map((entry: any) => {
+      // If entry already has governance with a type, keep it as is
+      if (entry.governance && entry.governance.type) {
+        return entry;
+      }
+      // Otherwise, initialize with default governance (eoa)
+      const { likelihood, ...entryWithoutLikelihood } = entry;
+      return {
+        ...entryWithoutLikelihood,
+        governance: {
+          type: 'eoa' as const,
+        },
+      };
+    }),
+  }));
+}
 
 export default function Home() {
   const [severityMatrix, setSeverityMatrix] = useState<
@@ -30,6 +56,7 @@ export default function Home() {
   >(DEFAULT_SEVERITY_MATRIX_2D);
   const [functionTables, setFunctionTables] = useState<FunctionTableType[]>([]);
   const [ratingRules, setRatingRules] = useState<RatingRule[]>(DEFAULT_RATING_RULES);
+  const [likelihoodMappingRules, setLikelihoodMappingRules] = useState<LikelihoodMappingRule[]>(DEFAULT_LIKELIHOOD_MAPPING_RULES);
   const [mounted, setMounted] = useState(false);
 
   // Load from localStorage on mount
@@ -48,7 +75,9 @@ export default function Home() {
 
     if (savedTables) {
       try {
-        setFunctionTables(JSON.parse(savedTables));
+        const parsedTables = JSON.parse(savedTables);
+        const migratedTables = migrateTableData(parsedTables);
+        setFunctionTables(migratedTables);
       } catch (e) {
         console.error("Failed to load function tables", e);
         setFunctionTables([
@@ -91,6 +120,15 @@ export default function Home() {
       }
     }
 
+    const savedLikelihoodMapping = localStorage.getItem(STORAGE_KEY_LIKELIHOOD_MAPPING);
+    if (savedLikelihoodMapping) {
+      try {
+        setLikelihoodMappingRules(JSON.parse(savedLikelihoodMapping));
+      } catch (e) {
+        console.error("Failed to load likelihood mapping rules", e);
+      }
+    }
+
     setMounted(true);
   }, []);
 
@@ -110,8 +148,13 @@ export default function Home() {
     localStorage.setItem(STORAGE_KEY_RULES, JSON.stringify(ratingRules));
   }, [ratingRules, mounted]);
 
-  // Update all function entries when severity matrix changes
-  // This ensures that when a user modifies the severity matrix,
+  useEffect(() => {
+    if (!mounted) return;
+    localStorage.setItem(STORAGE_KEY_LIKELIHOOD_MAPPING, JSON.stringify(likelihoodMappingRules));
+  }, [likelihoodMappingRules, mounted]);
+
+  // Update all function entries when severity matrix or likelihood mapping changes
+  // This ensures that when a user modifies the severity matrix or governance,
   // all function classification entries automatically recalculate their severity scores
   useEffect(() => {
     if (!mounted || functionTables.length === 0) return;
@@ -120,14 +163,19 @@ export default function Home() {
       ...table,
       entries: table.entries.map((entry) => ({
         ...entry,
-        // Recalculate severity based on current matrix
-        severity: severityMatrix[entry.impact][entry.likelihood],
+        // Recalculate severity based on governance config and current matrix
+        severity: calculateSeverityFromGovernance(
+          entry.impact,
+          entry.governance,
+          severityMatrix,
+          likelihoodMappingRules
+        ),
       })),
     }));
 
     setFunctionTables(updatedTables);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [severityMatrix, mounted]);
+  }, [severityMatrix, likelihoodMappingRules, mounted]);
 
   const handleAddTable = () => {
     const newTable: FunctionTableType = {
@@ -171,7 +219,11 @@ export default function Home() {
         </header>
 
         {/* Final Rating Visualization at the top */}
-        <FinalRatingsVisualization functionTables={functionTables} ratingRules={ratingRules} />
+        <FinalRatingsVisualization
+          functionTables={functionTables}
+          ratingRules={ratingRules}
+          likelihoodMappingRules={likelihoodMappingRules}
+        />
 
         {/* Severity Ratings Matrix */}
         <SeverityRatingsTable
@@ -185,6 +237,12 @@ export default function Home() {
           onRulesChange={setRatingRules}
         />
 
+        {/* Likelihood Mapping Configuration */}
+        <LikelihoodMappingConfiguration
+          rules={likelihoodMappingRules}
+          onRulesChange={setLikelihoodMappingRules}
+        />
+
         {/* Projects */}
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">Projects</h2>
@@ -193,6 +251,7 @@ export default function Home() {
               <FunctionClassificationTable
                 tableData={table}
                 severityMatrix={severityMatrix}
+                likelihoodMappingRules={likelihoodMappingRules}
                 onTableChange={handleTableChange}
               />
               {functionTables.length > 1 && (

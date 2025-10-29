@@ -1,6 +1,15 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { FunctionClassificationEntry, FinalRating, Severity, Impact, RatingRule } from "./types"
+import {
+  FunctionClassificationEntry,
+  FinalRating,
+  Severity,
+  Impact,
+  RatingRule,
+  GovernanceConfig,
+  Likelihood,
+  LikelihoodMappingRule,
+} from "./types"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -21,9 +30,54 @@ const IMPACT_ORDER: Record<Impact, number> = {
   'Critical': 4,
 }
 
+const LIKELIHOOD_ORDER: Record<Likelihood, number> = {
+  'Mitigated': 1,
+  'Low': 2,
+  'Medium': 3,
+  'High': 4,
+}
+
+export function calculateLikelihoodFromGovernance(
+  governance: GovernanceConfig,
+  mappingRules: LikelihoodMappingRule[]
+): Likelihood {
+  switch (governance.type) {
+    case 'voting':
+      // Check voting thresholds against mapping rules
+      const delayDays = governance.votingDelayDays || 0
+      const voters = governance.requiredVoters || 0
+
+      // Find the highest likelihood that matches
+      for (let i = 0; i < mappingRules.length; i++) {
+        const rule = mappingRules[i]
+        if (
+          delayDays >= rule.votingMinDelayDays &&
+          voters >= rule.votingMinVoters
+        ) {
+          return rule.likelihood
+        }
+      }
+      return 'High' // Fallback
+
+    case 'security_council':
+      return 'Medium'
+
+    case 'multisig_delay_7d':
+      return 'Medium'
+
+    case 'multisig':
+    case 'eoa':
+      return 'High'
+
+    default:
+      return 'High'
+  }
+}
+
 export function calculateRatingWithRules(
   entries: FunctionClassificationEntry[],
-  rules: RatingRule[]
+  rules: RatingRule[],
+  mappingRules?: LikelihoodMappingRule[]
 ): FinalRating {
   if (entries.length === 0) return 'AAA'
 
@@ -50,6 +104,16 @@ export function calculateRatingWithRules(
   )
 
   return matchingRule ? matchingRule.rating : 'AAA'
+}
+
+export function calculateSeverityFromGovernance(
+  impact: Impact,
+  governance: GovernanceConfig,
+  severityMatrix: Record<Impact, Record<Likelihood, Severity>>,
+  mappingRules: LikelihoodMappingRule[]
+): Severity {
+  const likelihood = calculateLikelihoodFromGovernance(governance, mappingRules)
+  return severityMatrix[impact][likelihood]
 }
 
 export function calculateRating(entries: FunctionClassificationEntry[]): FinalRating {

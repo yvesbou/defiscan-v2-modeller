@@ -7,6 +7,7 @@ import {
   RatingRule,
   Stage,
   StageEntry,
+  LikelihoodMappingRule,
 } from "@/lib/types";
 import { FINAL_RATINGS, STAGE_ENTRIES } from "@/lib/constants";
 import { calculateRatingWithRules } from "@/lib/utils";
@@ -14,6 +15,7 @@ import { calculateRatingWithRules } from "@/lib/utils";
 interface FinalRatingsVisualizationProps {
   functionTables: FunctionTableType[];
   ratingRules: RatingRule[];
+  likelihoodMappingRules: LikelihoodMappingRule[];
 }
 
 const getRatingColor = (rating: FinalRating): string => {
@@ -72,11 +74,12 @@ const getStageTextColor = (stage: Stage): string => {
 export function FinalRatingsVisualization({
   functionTables,
   ratingRules,
+  likelihoodMappingRules,
 }: FinalRatingsVisualizationProps) {
   const allEntries = functionTables.flatMap((table) => table.entries);
 
   // Calculate the final rating based on worst case
-  const finalRating = calculateRatingWithRules(allEntries, ratingRules);
+  const finalRating = calculateRatingWithRules(allEntries, ratingRules, likelihoodMappingRules);
   const ratingInfo = FINAL_RATINGS.find((r) => r.rating === finalRating);
 
   const ratings: FinalRating[] = [
@@ -97,7 +100,7 @@ export function FinalRatingsVisualization({
   // Calculate per-project ratings
   const projectRatings = functionTables.map((table) => ({
     name: table.title || "Untitled Project",
-    rating: calculateRatingWithRules(table.entries, ratingRules),
+    rating: calculateRatingWithRules(table.entries, ratingRules, likelihoodMappingRules),
   }));
 
   // Group projects by rating

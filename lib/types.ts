@@ -23,7 +23,7 @@ export interface FunctionClassificationEntry {
   id: string;
   function: string;
   impact: Impact;
-  likelihood: Likelihood;
+  governance: GovernanceConfig;
   severity: Severity;
 }
 
@@ -55,4 +55,24 @@ export interface StageEntry {
   id: string;
   name: string;
   stage: Stage;
+}
+
+export type GovernanceType =
+  | "voting"
+  | "multisig_delay_7d"
+  | "security_council"
+  | "eoa"
+  | "multisig";
+
+export interface GovernanceConfig {
+  type: GovernanceType;
+  votingDelayDays?: number;
+  requiredVoters?: number;
+}
+
+export interface LikelihoodMappingRule {
+  likelihood: Likelihood;
+  votingMinDelayDays: number;
+  votingMinVoters: number;
+  description: string;
 }
