@@ -1,0 +1,27 @@
+{
+  "title": "Aave V3",
+  "entries": [
+    {
+      "id": "1",
+      "function": "Proxy(PoolConfigurator).updateAToken",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "voting",
+        "votingDelayDays": 5,
+        "requiredVoters": 4
+      },
+      "severity": "High"
+    },
+    {
+      "id": "2",
+      "function": "AaveOracle.getAssetPrice",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Dependency",
+        "name": "chainlink"
+      },
+      "severity": "High"
+    }
+  ]
+}

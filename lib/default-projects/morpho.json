@@ -1,0 +1,25 @@
+{
+  "title": "Morpho",
+  "entries": [
+    {
+      "id": "1",
+      "function": "MorphoTokenEthereum.mint",
+      "impact": "High",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "multisig"
+      },
+      "severity": "Medium"
+    },
+    {
+      "id": "2",
+      "function": "Morpho.liquidate",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Dependency",
+        "name": "chainlink"
+      },
+      "severity": "High"
+    }
+  ]
+}

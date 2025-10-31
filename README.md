@@ -20,7 +20,7 @@ A comprehensive web application for assessing and managing decentralized finance
 
 #### Severity Ratings Matrix
 
-- 2D matrix mapping Impact (Low, Medium, High, Critical) × Likelihood (Mitigated, Low, Medium, High) → Severity
+- 2D matrix mapping Impact (Low, Medium, High, Critical) x Likelihood (Mitigated, Low, Medium, High) -> Severity
 - Interactive table for customizing severity thresholds
 - Affects all function classifications dynamically
 - Collapsible interface

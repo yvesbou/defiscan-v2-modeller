@@ -1,0 +1,15 @@
+{
+  "title": "Liquity V1",
+  "entries": [
+    {
+      "id": "1",
+      "function": "PriceFeed.fetchPrice",
+      "impact": "Low",
+      "governance": {
+        "functionType": "Dependency",
+        "name": "chainlink"
+      },
+      "severity": "Low"
+    }
+  ]
+}

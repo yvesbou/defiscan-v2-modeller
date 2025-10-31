@@ -1,0 +1,15 @@
+{
+  "title": "Aerodrome",
+  "entries": [
+    {
+      "id": "1",
+      "function": "Voter.whitelistNFT",
+      "impact": "High",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "multisig"
+      },
+      "severity": "Medium"
+    }
+  ]
+}

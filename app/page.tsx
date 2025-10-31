@@ -16,6 +16,7 @@ import {
   DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG,
 } from "@/lib/constants";
 import { calculateSeverityFromGovernance } from "@/lib/utils";
+import { getDefaultProjects } from "@/lib/default-projects";
 import { SeverityRatingsTable } from "@/components/SeverityRatingsTable";
 import { FunctionClassificationTable } from "@/components/FunctionClassificationTable";
 import { FinalRatingsVisualization } from "@/components/FinalRatingsVisualization";
@@ -144,23 +145,11 @@ export default function Home() {
         setFunctionTables(migratedTables);
       } catch (e) {
         console.error("Failed to load function tables", e);
-        setFunctionTables([
-          {
-            id: Date.now().toString(),
-            title: "Function Classifications",
-            entries: [],
-          },
-        ]);
+        setFunctionTables(getDefaultProjects());
       }
     } else {
-      // Initialize with one empty table
-      setFunctionTables([
-        {
-          id: Date.now().toString(),
-          title: "Function Classifications",
-          entries: [],
-        },
-      ]);
+      // Initialize with default projects
+      setFunctionTables(getDefaultProjects());
     }
 
     if (savedRules) {
@@ -405,7 +394,10 @@ export default function Home() {
                 localStorage.removeItem(STORAGE_KEY_TABLES);
                 localStorage.removeItem(STORAGE_KEY_RULES);
                 localStorage.removeItem(STORAGE_KEY_LIKELIHOOD_MAPPING);
-                window.location.reload();
+                setSeverityMatrix(DEFAULT_SEVERITY_MATRIX_2D);
+                setFunctionTables(getDefaultProjects());
+                setRatingRules(DEFAULT_RATING_RULES);
+                setGovernanceLikelihoodConfig(DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG);
               }}
               variant="outline"
               size="sm"
