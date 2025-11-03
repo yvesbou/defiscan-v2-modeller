@@ -49,12 +49,12 @@ export const DEFAULT_PROJECTS: FunctionClassificationTable[] = [
   {
     id: "8",
     title: sky.title,
-    entries: compoundv3.entries as any,
+    entries: sky.entries as any,
   },
   {
     id: "9",
     title: pendlev2.title,
-    entries: compoundv3.entries as any,
+    entries: pendlev2.entries as any,
   },
   {
     id: "10",
