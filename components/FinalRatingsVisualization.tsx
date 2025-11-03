@@ -155,7 +155,7 @@ export function FinalRatingsVisualization({
 
                         const finalProjectPosition =
                           projectPosition > 50
-                            ? projectPosition - 2
+                            ? projectPosition - 3
                             : projectPosition + 3;
 
                         // Calculate how many empty rows are above this group
@@ -185,9 +185,7 @@ export function FinalRatingsVisualization({
                                     alignItems: "center",
                                   }}
                                 >
-                                  <span className="truncate w-16">
-                                    {project.name}
-                                  </span>
+                                  <span className="w-16">{project.name}</span>
                                 </div>
                               ))}
                             </div>
@@ -304,9 +302,7 @@ export function FinalRatingsVisualization({
                                 alignItems: "center",
                               }}
                             >
-                              <span className="truncate w-20">
-                                {protocol.name}
-                              </span>
+                              <span className="w-20">{protocol.name}</span>
                             </div>
                           ))}
                         </div>
