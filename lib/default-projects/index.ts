@@ -1,5 +1,7 @@
 import { FunctionClassificationTable } from "@/lib/types";
 import aaveV3 from "./aave-v3.json";
+import spark from "./spark.json";
+import compoundv3 from "./compoundv3.json";
 import morpho from "./morpho.json";
 import uniswapV3 from "./uniswap-v3.json";
 import liquityV1 from "./liquity-v1.json";
