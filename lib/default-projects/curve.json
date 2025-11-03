@@ -1,0 +1,17 @@
+{
+  "title": "Curve",
+  "entries": [
+    {
+      "id": "1",
+      "function": "ScrvusdTokenYearnV3VaultProxy.add_strategy",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "voting",
+        "votingDelayDays": 7,
+        "requiredVoters": 9
+      },
+      "severity": "Critical"
+    }
+  ]
+}

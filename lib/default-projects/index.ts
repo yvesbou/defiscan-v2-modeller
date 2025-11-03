@@ -6,6 +6,9 @@ import morpho from "./morpho.json";
 import uniswapV3 from "./uniswap-v3.json";
 import liquityV1 from "./liquity-v1.json";
 import aerodrome from "./aerodrome.json";
+import sky from "./sky.json";
+import curve from "./curve.json";
+import pendlev2 from "./pendle-v2.json";
 
 export const DEFAULT_PROJECTS: FunctionClassificationTable[] = [
   {
@@ -42,6 +45,21 @@ export const DEFAULT_PROJECTS: FunctionClassificationTable[] = [
     id: "7",
     title: compoundv3.title,
     entries: compoundv3.entries as any,
+  },
+  {
+    id: "8",
+    title: sky.title,
+    entries: compoundv3.entries as any,
+  },
+  {
+    id: "9",
+    title: pendlev2.title,
+    entries: compoundv3.entries as any,
+  },
+  {
+    id: "10",
+    title: curve.title,
+    entries: curve.entries as any,
   },
 ];
 
