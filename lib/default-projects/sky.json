@@ -1,0 +1,39 @@
+{
+  "title": "Sky",
+  "entries": [
+    {
+      "id": "1",
+      "function": "USDS.upgrade",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "voting",
+        "votingDelayDays": 0,
+        "requiredVoters": 2
+      },
+      "severity": "Critical"
+    },
+    {
+      "id": "2",
+      "function": "sUSDS.upgrade",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "voting",
+        "votingDelayDays": 0,
+        "requiredVoters": 2
+      },
+      "severity": "Critical"
+    },
+    {
+      "id": "3",
+      "function": "LitePSM.sellGem",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Dependency",
+        "name": "usdc"
+      },
+      "severity": "High"
+    }
+  ]
+}
