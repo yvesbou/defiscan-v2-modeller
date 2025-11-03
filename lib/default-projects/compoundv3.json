@@ -1,0 +1,27 @@
+{
+  "title": "CompoundV3",
+  "entries": [
+    {
+      "id": "1",
+      "function": "Proxy(Comet).upgradeTo",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "voting",
+        "votingDelayDays": 7,
+        "requiredVoters": 27
+      },
+      "severity": "Medium"
+    },
+    {
+      "id": "2",
+      "function": "Proxy(Comet).getPrice",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Dependency",
+        "name": "chainlink"
+      },
+      "severity": "High"
+    }
+  ]
+}

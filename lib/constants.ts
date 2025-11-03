@@ -346,6 +346,8 @@ export const DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG: GovernanceLikelihoodConfigura
     security_council: "Medium",
     dependencies: {
       chainlink: "Low",
+      chronicle: "Low",
+      sky: "High",
     },
     operators: {},
   };

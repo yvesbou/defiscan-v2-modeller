@@ -1,0 +1,57 @@
+{
+  "title": "Spark",
+  "entries": [
+    {
+      "id": "1",
+      "function": "SparkLendFreezerMom.pauseAllMarkets",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "voting",
+        "votingDelayDays": 0,
+        "requiredVoters": 4
+      },
+      "severity": "Critical"
+    },
+    {
+      "id": "2",
+      "function": "SparkLendFreezerMom.pauseAllMarkets",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "multisig"
+      },
+      "severity": "Critical"
+    },
+    {
+      "id": "3",
+      "function": "USDS.upgrade",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Dependency",
+        "name": "Sky"
+      },
+      "severity": "Critical"
+    },
+    {
+      "id": "4",
+      "function": "sUSDS.upgrade",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Dependency",
+        "name": "Sky"
+      },
+      "severity": "Critical"
+    },
+    {
+      "id": "5",
+      "function": "AaveOracle.getAssetPrice",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Dependency",
+        "name": "chainlink"
+      },
+      "severity": "High"
+    }
+  ]
+}
