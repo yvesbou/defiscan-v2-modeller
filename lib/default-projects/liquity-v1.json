@@ -4,12 +4,12 @@
     {
       "id": "1",
       "function": "PriceFeed.fetchPrice",
-      "impact": "Low",
+      "impact": "Critical",
       "governance": {
         "functionType": "Dependency",
-        "name": "chainlink"
+        "name": "chainlink_tellor"
       },
-      "severity": "Low"
+      "severity": "Medium"
     }
   ]
 }
