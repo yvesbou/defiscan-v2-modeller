@@ -1,0 +1,15 @@
+{
+  "title": "PendleV2",
+  "entries": [
+    {
+      "id": "1",
+      "function": "PendleERC4626SYV2.pause",
+      "impact": "Critical",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "multisig"
+      },
+      "severity": "Critical"
+    }
+  ]
+}
