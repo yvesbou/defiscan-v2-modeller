@@ -33,6 +33,16 @@ export const DEFAULT_PROJECTS: FunctionClassificationTable[] = [
     title: aerodrome.title,
     entries: aerodrome.entries as any,
   },
+  {
+    id: "6",
+    title: spark.title,
+    entries: spark.entries as any,
+  },
+  {
+    id: "7",
+    title: compoundv3.title,
+    entries: compoundv3.entries as any,
+  },
 ];
 
 export function getDefaultProjects(): FunctionClassificationTable[] {
