@@ -345,6 +345,7 @@ export const DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG: GovernanceLikelihoodConfigura
     multisig_delay_7d: "Medium",
     security_council: "Medium",
     dependencies: {
+      chainlink_tellor: "Mitigated",
       chainlink: "Low",
       chronicle: "Low",
       sky: "High",
