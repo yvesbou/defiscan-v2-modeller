@@ -22,7 +22,7 @@
         "functionType": "Dependency",
         "name": "chainlink"
       },
-      "severity": "High",
+      "severity": "Medium",
       "likelihood": "Low"
     }
   ]
