@@ -17,26 +17,26 @@ export const DEFAULT_SEVERITY_MATRIX_2D: Record<
 > = {
   Low: {
     Mitigated: "Informational",
-    Low: "Informational",
+    Low: "Low",
     Medium: "Low",
-    High: "Medium",
+    High: "Low",
   },
   Medium: {
     Mitigated: "Informational",
     Low: "Low",
     Medium: "Medium",
-    High: "High",
+    High: "Medium",
   },
   High: {
-    Mitigated: "Low",
-    Low: "Medium",
-    Medium: "High",
-    High: "Critical",
+    Mitigated: "Informational",
+    Low: "Low",
+    Medium: "Medium",
+    High: "High",
   },
   Critical: {
-    Mitigated: "Medium",
-    Low: "High",
-    Medium: "Critical",
+    Mitigated: "Informational",
+    Low: "Medium",
+    Medium: "High",
     High: "Critical",
   },
 };
@@ -44,81 +44,21 @@ export const DEFAULT_SEVERITY_MATRIX_2D: Record<
 // Flat array structure for displaying/editing the matrix
 export const DEFAULT_SEVERITY_MATRIX_FLAT: SeverityMatrixEntry[] = [
   { impact: "Low", likelihood: "Mitigated", severity: "Informational" },
-  { impact: "Low", likelihood: "Low", severity: "Informational" },
+  { impact: "Low", likelihood: "Low", severity: "Low" },
   { impact: "Low", likelihood: "Medium", severity: "Low" },
-  { impact: "Low", likelihood: "High", severity: "Medium" },
+  { impact: "Low", likelihood: "High", severity: "Low" },
   { impact: "Medium", likelihood: "Mitigated", severity: "Informational" },
   { impact: "Medium", likelihood: "Low", severity: "Low" },
   { impact: "Medium", likelihood: "Medium", severity: "Medium" },
-  { impact: "Medium", likelihood: "High", severity: "High" },
-  { impact: "High", likelihood: "Mitigated", severity: "Low" },
-  { impact: "High", likelihood: "Low", severity: "Medium" },
-  { impact: "High", likelihood: "Medium", severity: "High" },
-  { impact: "High", likelihood: "High", severity: "Critical" },
-  { impact: "Critical", likelihood: "Mitigated", severity: "Medium" },
-  { impact: "Critical", likelihood: "Low", severity: "High" },
-  { impact: "Critical", likelihood: "Medium", severity: "Critical" },
+  { impact: "Medium", likelihood: "High", severity: "Medium" },
+  { impact: "High", likelihood: "Mitigated", severity: "Informational" },
+  { impact: "High", likelihood: "Low", severity: "Low" },
+  { impact: "High", likelihood: "Medium", severity: "Medium" },
+  { impact: "High", likelihood: "High", severity: "High" },
+  { impact: "Critical", likelihood: "Mitigated", severity: "Informational" },
+  { impact: "Critical", likelihood: "Low", severity: "Medium" },
+  { impact: "Critical", likelihood: "Medium", severity: "High" },
   { impact: "Critical", likelihood: "High", severity: "Critical" },
-];
-
-export const FINAL_RATINGS: FinalRatingEntry[] = [
-  {
-    rating: "AAA",
-    scores: "Immutable and autonomous",
-    description: "No Admins, Dependencies or Operators identified",
-  },
-  {
-    rating: "AA",
-    scores: "Informational Severity risks",
-    description: "Centralization risks are Informational only.",
-  },
-  {
-    rating: "A",
-    scores: "Low Severity risks",
-    description:
-      "Centralization risks are Low, not exposing High or Critical Impact threat vectors.",
-  },
-  {
-    rating: "BBB",
-    scores: "Medium Severity risks with Medium Impact",
-    description:
-      "Centralization risks are Medium based on a Medium Impact threat vector.",
-  },
-  {
-    rating: "BB",
-    scores: "Medium Severity risks with High Impact",
-    description:
-      "Centralization risks are Medium based on a High Impact threat vector.",
-  },
-  {
-    rating: "B",
-    scores: "Medium Severity risks with Critical Impact",
-    description:
-      "Centralization risks are Medium based on a Critical Impact threat vector.",
-  },
-  {
-    rating: "CCC",
-    scores: "High Severity risks with Medium Impact",
-    description:
-      "Centralization risks are High based on a Medium Impact threat vector.",
-  },
-  {
-    rating: "CC",
-    scores: "High Severity risks with High Impact",
-    description:
-      "Centralization risks are High based on a High Impact threat vector.",
-  },
-  {
-    rating: "C",
-    scores: "High Severity risks with Critical Impact",
-    description:
-      "Centralization risks are High based on a Critical Impact threat vector.",
-  },
-  {
-    rating: "D",
-    scores: "Critical Severity risks",
-    description: "Centralization risks are Critical.",
-  },
 ];
 
 export const IMPACTS = ["Low", "Medium", "High", "Critical"] as const;
@@ -158,31 +98,59 @@ export const DEFAULT_RATING_RULES: RatingRule[] = [
     impact: "Medium",
     description: "Informational Severity risks",
   },
-  // A: Low severity with Low or Medium impact
   {
     id: "4",
+    rating: "AA",
+    severity: "Informational",
+    impact: "High",
+    description: "Informational Severity risks",
+  },
+  {
+    id: "5",
+    rating: "AA",
+    severity: "Informational",
+    impact: "Critical",
+    description: "Informational Severity risks",
+  },
+  // A: Low severity with Low or Medium impact
+  {
+    id: "6",
     rating: "A",
     severity: "Low",
     impact: "Low",
     description: "Low Severity risks",
   },
   {
-    id: "5",
+    id: "7",
     rating: "A",
     severity: "Low",
     impact: "Medium",
     description: "Low Severity risks",
   },
+  {
+    id: "8",
+    rating: "A",
+    severity: "Low",
+    impact: "High",
+    description: "Low Severity risks",
+  },
+  {
+    id: "9",
+    rating: "A",
+    severity: "Low",
+    impact: "Critical",
+    description: "Low Severity risks",
+  },
   // BBB: Medium severity with Low or Medium impact
   {
-    id: "6",
+    id: "10",
     rating: "BBB",
     severity: "Medium",
     impact: "Low",
     description: "Medium Severity risks with Low Impact",
   },
   {
-    id: "7",
+    id: "11",
     rating: "BBB",
     severity: "Medium",
     impact: "Medium",
@@ -190,7 +158,7 @@ export const DEFAULT_RATING_RULES: RatingRule[] = [
   },
   // BB: Medium severity with High impact
   {
-    id: "8",
+    id: "12",
     rating: "BB",
     severity: "Medium",
     impact: "High",
@@ -198,7 +166,7 @@ export const DEFAULT_RATING_RULES: RatingRule[] = [
   },
   // B: Medium severity with Critical impact
   {
-    id: "9",
+    id: "13",
     rating: "B",
     severity: "Medium",
     impact: "Critical",
@@ -206,14 +174,14 @@ export const DEFAULT_RATING_RULES: RatingRule[] = [
   },
   // CCC: High severity with Low or Medium impact
   {
-    id: "10",
+    id: "14",
     rating: "CCC",
     severity: "High",
     impact: "Low",
     description: "High Severity risks with Low Impact",
   },
   {
-    id: "11",
+    id: "15",
     rating: "CCC",
     severity: "High",
     impact: "Medium",
@@ -221,7 +189,7 @@ export const DEFAULT_RATING_RULES: RatingRule[] = [
   },
   // CC: High severity with High impact
   {
-    id: "12",
+    id: "16",
     rating: "CC",
     severity: "High",
     impact: "High",
@@ -229,7 +197,7 @@ export const DEFAULT_RATING_RULES: RatingRule[] = [
   },
   // C: High severity with Critical impact
   {
-    id: "13",
+    id: "17",
     rating: "C",
     severity: "High",
     impact: "Critical",
@@ -237,28 +205,28 @@ export const DEFAULT_RATING_RULES: RatingRule[] = [
   },
   // D: Critical severity (all impacts)
   {
-    id: "14",
+    id: "18",
     rating: "D",
     severity: "Critical",
     impact: "Low",
     description: "Critical Severity risks",
   },
   {
-    id: "15",
+    id: "19",
     rating: "D",
     severity: "Critical",
     impact: "Medium",
     description: "Critical Severity risks",
   },
   {
-    id: "16",
+    id: "20",
     rating: "D",
     severity: "Critical",
     impact: "High",
     description: "Critical Severity risks",
   },
   {
-    id: "17",
+    id: "21",
     rating: "D",
     severity: "Critical",
     impact: "Critical",

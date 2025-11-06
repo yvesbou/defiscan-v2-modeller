@@ -4,7 +4,7 @@
     {
       "id": "1",
       "function": "MorphoTokenEthereum.mint",
-      "impact": "High",
+      "impact": "Medium",
       "governance": {
         "functionType": "Admin",
         "governanceType": "multisig"
@@ -19,7 +19,7 @@
         "functionType": "Dependency",
         "name": "chainlink"
       },
-      "severity": "High"
+      "severity": "Medium"
     }
   ]
 }

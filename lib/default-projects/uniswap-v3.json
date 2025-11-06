@@ -1,17 +1,4 @@
 {
   "title": "Uniswap V3",
-  "entries": [
-    {
-      "id": "1",
-      "function": "UniswapV3Pool.collectProtocol",
-      "impact": "Low",
-      "governance": {
-        "functionType": "Admin",
-        "governanceType": "voting",
-        "votingDelayDays": 8,
-        "requiredVoters": 32
-      },
-      "severity": "Low"
-    }
-  ]
+  "entries": []
 }

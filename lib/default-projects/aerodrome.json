@@ -4,12 +4,12 @@
     {
       "id": "1",
       "function": "Voter.whitelistNFT",
-      "impact": "High",
+      "impact": "Low",
       "governance": {
         "functionType": "Admin",
         "governanceType": "multisig"
       },
-      "severity": "Medium"
+      "severity": "Low"
     }
   ]
 }

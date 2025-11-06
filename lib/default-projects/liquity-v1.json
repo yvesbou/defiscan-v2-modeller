@@ -9,7 +9,7 @@
         "functionType": "Dependency",
         "name": "chainlink_tellor"
       },
-      "severity": "Medium"
+      "severity": "Informational"
     }
   ]
 }

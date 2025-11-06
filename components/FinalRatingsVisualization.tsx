@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   FunctionClassificationTable as FunctionTableType,
   FinalRating,
@@ -9,7 +8,7 @@ import {
   StageEntry,
   LikelihoodMappingRule,
 } from "@/lib/types";
-import { FINAL_RATINGS, STAGE_ENTRIES } from "@/lib/constants";
+import { STAGE_ENTRIES } from "@/lib/constants";
 import { calculateRatingWithRules } from "@/lib/utils";
 
 interface FinalRatingsVisualizationProps {
@@ -84,7 +83,6 @@ export function FinalRatingsVisualization({
     ratingRules,
     likelihoodMappingRules
   );
-  const ratingInfo = FINAL_RATINGS.find((r) => r.rating === finalRating);
 
   const ratings: FinalRating[] = [
     "AAA",

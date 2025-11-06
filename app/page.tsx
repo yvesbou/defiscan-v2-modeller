@@ -11,7 +11,6 @@ import {
 } from "@/lib/types";
 import {
   DEFAULT_SEVERITY_MATRIX_2D,
-  DEFAULT_SEVERITY_MATRIX_FLAT,
   DEFAULT_RATING_RULES,
   DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG,
 } from "@/lib/constants";
@@ -397,7 +396,9 @@ export default function Home() {
                 setSeverityMatrix(DEFAULT_SEVERITY_MATRIX_2D);
                 setFunctionTables(getDefaultProjects());
                 setRatingRules(DEFAULT_RATING_RULES);
-                setGovernanceLikelihoodConfig(DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG);
+                setGovernanceLikelihoodConfig(
+                  DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG
+                );
               }}
               variant="outline"
               size="sm"
