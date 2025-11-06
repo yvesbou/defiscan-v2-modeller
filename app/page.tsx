@@ -14,7 +14,7 @@ import {
   DEFAULT_RATING_RULES,
   DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG,
 } from "@/lib/constants";
-import { calculateSeverityFromGovernance } from "@/lib/utils";
+import { calculateSeverityFromGovernance, calculateLikelihoodFromGovernance } from "@/lib/utils";
 import { getDefaultProjects } from "@/lib/default-projects";
 import { SeverityRatingsTable } from "@/components/SeverityRatingsTable";
 import { FunctionClassificationTable } from "@/components/FunctionClassificationTable";
@@ -30,20 +30,21 @@ const STORAGE_KEY_RULES = "defiscan_rating_rules";
 const STORAGE_KEY_LIKELIHOOD_MAPPING = "defiscan_likelihood_mapping";
 
 // Migration function to convert old entries (with likelihood) to new entries (with governance)
-function migrateTableData(tables: any[]): FunctionTableType[] {
+function migrateTableData(tables: any[], governanceLikelihoodConfig: GovernanceLikelihoodConfiguration): FunctionTableType[] {
   return tables.map((table: any) => ({
     ...table,
     entries: table.entries.map((entry: any) => {
+      let migratedEntry = entry;
+
       // If entry already has governance with functionType, keep it as is
       if (entry.governance && entry.governance.functionType) {
-        return entry;
-      }
-      // If entry has governance with type (old format), convert to new format
-      if (
+        migratedEntry = entry;
+      } else if (
         entry.governance &&
         (entry.governance.type || (entry.governance as any).governanceType)
       ) {
-        return {
+        // If entry has governance with type (old format), convert to new format
+        migratedEntry = {
           ...entry,
           governance: {
             functionType: "Admin" as const,
@@ -53,16 +54,26 @@ function migrateTableData(tables: any[]): FunctionTableType[] {
             requiredVoters: entry.governance.requiredVoters,
           },
         };
+      } else {
+        // Otherwise, initialize with default governance (Admin with eoa)
+        migratedEntry = {
+          ...entry,
+          governance: {
+            functionType: "Admin" as const,
+            governanceType: "eoa" as const,
+          },
+        };
       }
-      // Otherwise, initialize with default governance (Admin with eoa)
-      const { likelihood, ...entryWithoutLikelihood } = entry;
-      return {
-        ...entryWithoutLikelihood,
-        governance: {
-          functionType: "Admin" as const,
-          governanceType: "eoa" as const,
-        },
-      };
+
+      // Ensure likelihood field exists, calculate if missing
+      if (!migratedEntry.likelihood) {
+        migratedEntry.likelihood = calculateLikelihoodFromGovernance(
+          migratedEntry.governance,
+          governanceLikelihoodConfig
+        );
+      }
+
+      return migratedEntry;
     }),
   }));
 }
@@ -140,7 +151,7 @@ export default function Home() {
     if (savedTables) {
       try {
         const parsedTables = JSON.parse(savedTables);
-        const migratedTables = migrateTableData(parsedTables);
+        const migratedTables = migrateTableData(parsedTables, DEFAULT_GOVERNANCE_LIKELIHOOD_CONFIG);
         setFunctionTables(migratedTables);
       } catch (e) {
         console.error("Failed to load function tables", e);
@@ -225,12 +236,13 @@ export default function Home() {
       ...table,
       entries: table.entries.map((entry) => ({
         ...entry,
-        // Recalculate severity based on governance config and current matrix
+        // Recalculate severity based on the entry's likelihood field (user-set or inferred)
         severity: calculateSeverityFromGovernance(
           entry.impact,
           entry.governance,
           severityMatrix,
-          governanceLikelihoodConfig
+          governanceLikelihoodConfig,
+          entry.likelihood
         ),
       })),
     }));
@@ -259,8 +271,6 @@ export default function Home() {
       )
     );
   };
-
-  const allEntries = functionTables.flatMap((table) => table.entries);
 
   if (!mounted) {
     return <div>Loading...</div>;

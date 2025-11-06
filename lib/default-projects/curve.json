@@ -11,7 +11,8 @@
         "votingDelayDays": 7,
         "requiredVoters": 9
       },
-      "severity": "Critical"
+      "severity": "High",
+      "likelihood": "Medium"
     }
   ]
 }

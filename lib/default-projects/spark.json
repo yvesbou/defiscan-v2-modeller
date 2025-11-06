@@ -11,7 +11,8 @@
         "votingDelayDays": 0,
         "requiredVoters": 4
       },
-      "severity": "Critical"
+      "severity": "Critical",
+      "likelihood": "High"
     },
     {
       "id": "2",
@@ -21,7 +22,8 @@
         "functionType": "Admin",
         "governanceType": "multisig"
       },
-      "severity": "Critical"
+      "severity": "Critical",
+      "likelihood": "High"
     },
     {
       "id": "3",
@@ -31,7 +33,8 @@
         "functionType": "Dependency",
         "name": "Sky"
       },
-      "severity": "Critical"
+      "severity": "Critical",
+      "likelihood": "High"
     },
     {
       "id": "4",
@@ -41,7 +44,8 @@
         "functionType": "Dependency",
         "name": "Sky"
       },
-      "severity": "Critical"
+      "severity": "Critical",
+      "likelihood": "High"
     },
     {
       "id": "5",
@@ -51,7 +55,8 @@
         "functionType": "Dependency",
         "name": "chainlink"
       },
-      "severity": "High"
+      "severity": "High",
+      "likelihood": "Low"
     }
   ]
 }

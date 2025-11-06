@@ -130,9 +130,10 @@ export function calculateSeverityFromGovernance(
   impact: Impact,
   governance: GovernanceConfig,
   severityMatrix: Record<Impact, Record<Likelihood, Severity>>,
-  config: GovernanceLikelihoodConfiguration | LikelihoodMappingRule[]
+  config: GovernanceLikelihoodConfiguration | LikelihoodMappingRule[],
+  overrideLikelihood?: Likelihood
 ): Severity {
-  const likelihood = calculateLikelihoodFromGovernance(governance, config)
+  const likelihood = overrideLikelihood ?? calculateLikelihoodFromGovernance(governance, config)
   return severityMatrix[impact][likelihood]
 }
 

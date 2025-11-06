@@ -24,6 +24,7 @@ export interface FunctionClassificationEntry {
   function: string;
   impact: Impact;
   governance: GovernanceConfig;
+  likelihood: Likelihood;
   severity: Severity;
 }
 

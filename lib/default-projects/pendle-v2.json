@@ -9,7 +9,8 @@
         "functionType": "Admin",
         "governanceType": "multisig"
       },
-      "severity": "Critical"
+      "severity": "Critical",
+      "likelihood": "High"
     }
   ]
 }

@@ -11,7 +11,8 @@
         "votingDelayDays": 5,
         "requiredVoters": 4
       },
-      "severity": "Medium"
+      "severity": "Medium",
+      "likelihood": "Low"
     },
     {
       "id": "2",
@@ -21,7 +22,8 @@
         "functionType": "Dependency",
         "name": "chainlink"
       },
-      "severity": "Medium"
+      "severity": "Medium",
+      "likelihood": "Low"
     }
   ]
 }

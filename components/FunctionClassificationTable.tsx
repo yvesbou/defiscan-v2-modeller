@@ -94,18 +94,23 @@ export function FunctionClassificationTable({
           }
         }
 
-        // Auto-calculate severity if impact or governance changed
+        // Get the likelihood (either updated or existing)
+        const likelihood = updates.likelihood ?? entry.likelihood
+
+        // Auto-calculate severity if impact, governance, or likelihood changed
         let severity = updates.severity !== undefined ? updates.severity : entry.severity
         if (
           updates.impact !== undefined ||
-          updates.governance !== undefined
+          updates.governance !== undefined ||
+          updates.likelihood !== undefined
         ) {
           const impact = (updates.impact ?? entry.impact) as Impact
           severity = calculateSeverityFromGovernance(
             impact,
             governance,
             severityMatrix,
-            governanceLikelihoodConfig
+            governanceLikelihoodConfig,
+            likelihood
           )
         }
 
@@ -115,6 +120,7 @@ export function FunctionClassificationTable({
           ...entry,
           ...otherUpdates,
           governance,
+          likelihood,
           severity,
         }
       }
@@ -128,11 +134,16 @@ export function FunctionClassificationTable({
       functionType: 'Admin',
       governanceType: 'eoa',
     }
+    const defaultLikelihood = calculateLikelihoodFromGovernance(
+      defaultGovernance,
+      governanceLikelihoodConfig
+    )
     const newEntry: FunctionClassificationEntry = {
       id: Date.now().toString(),
       function: '',
       impact: 'Low',
       governance: defaultGovernance,
+      likelihood: defaultLikelihood,
       severity: calculateSeverityFromGovernance(
         'Low',
         defaultGovernance,
@@ -234,8 +245,20 @@ export function FunctionClassificationTable({
                       <option value="Operator">Operator</option>
                     </Select>
                   </TableCell>
-                  <TableCell className="p-2 text-xs font-semibold">
-                    {calculateLikelihoodFromGovernance(governance, governanceLikelihoodConfig)}
+                  <TableCell className="p-2">
+                    <Select
+                      value={entry.likelihood}
+                      onChange={(e) =>
+                        handleEntryChange(entry.id, { likelihood: e.target.value as Likelihood })
+                      }
+                      className="w-full h-8 text-xs"
+                    >
+                      {(LIKELIHOODS as readonly Likelihood[]).map((likelihood) => (
+                        <option key={likelihood} value={likelihood}>
+                          {likelihood}
+                        </option>
+                      ))}
+                    </Select>
                   </TableCell>
                   <TableCell className="p-2">
                     <Select

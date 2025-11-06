@@ -11,7 +11,8 @@
         "votingDelayDays": 0,
         "requiredVoters": 2
       },
-      "severity": "Critical"
+      "severity": "Critical",
+      "likelihood": "High"
     },
     {
       "id": "2",
@@ -23,7 +24,8 @@
         "votingDelayDays": 0,
         "requiredVoters": 2
       },
-      "severity": "Critical"
+      "severity": "Critical",
+      "likelihood": "High"
     },
     {
       "id": "3",
@@ -33,7 +35,8 @@
         "functionType": "Dependency",
         "name": "usdc"
       },
-      "severity": "High"
+      "severity": "High",
+      "likelihood": "High"
     }
   ]
 }

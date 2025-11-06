@@ -9,7 +9,8 @@
         "functionType": "Dependency",
         "name": "chainlink_tellor"
       },
-      "severity": "Informational"
+      "severity": "Informational",
+      "likelihood": "Mitigated"
     }
   ]
 }
