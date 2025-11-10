@@ -7,7 +7,7 @@
       "impact": "Medium",
       "governance": {
         "functionType": "Admin",
-        "governanceType": "security council"
+        "governanceType": "security_council"
       },
       "severity": "Medium",
       "likelihood": "Medium"

@@ -11,8 +11,8 @@
         "votingDelayDays": 5,
         "requiredVoters": 4
       },
-      "severity": "Medium",
-      "likelihood": "Low"
+      "severity": "Low",
+      "likelihood": "Mitigated"
     },
     {
       "id": "2",
