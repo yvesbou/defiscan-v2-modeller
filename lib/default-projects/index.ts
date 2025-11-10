@@ -7,6 +7,7 @@ import uniswapV3 from "./uniswap-v3.json";
 import liquityV1 from "./liquity-v1.json";
 import aerodrome from "./aerodrome.json";
 import sky from "./sky.json";
+import crvUSD from "./crvUSD.json";
 import curve from "./curve.json";
 import pendlev2 from "./pendle-v2.json";
 
@@ -60,6 +61,11 @@ export const DEFAULT_PROJECTS: FunctionClassificationTable[] = [
     id: "10",
     title: curve.title,
     entries: curve.entries as any,
+  },
+  {
+    id: "10",
+    title: crvUSD.title,
+    entries: crvUSD.entries as any,
   },
 ];
 

@@ -1,17 +1,15 @@
 {
-  "title": "crvUSD",
+  "title": "Curve Dex",
   "entries": [
     {
       "id": "1",
-      "function": "ScrvusdTokenYearnV3VaultProxy.add_strategy",
-      "impact": "Critical",
+      "function": "FeeCollector.recover",
+      "impact": "Medium",
       "governance": {
         "functionType": "Admin",
-        "governanceType": "voting",
-        "votingDelayDays": 7,
-        "requiredVoters": 9
+        "governanceType": "security council"
       },
-      "severity": "High",
+      "severity": "Medium",
       "likelihood": "Medium"
     }
   ]
