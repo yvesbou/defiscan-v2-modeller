@@ -15,12 +15,12 @@
     {
       "id": "2",
       "function": "Morpho.liquidate",
-      "impact": "Critical",
+      "impact": "High",
       "governance": {
         "functionType": "Dependency",
         "name": "chainlink"
       },
-      "severity": "Medium",
+      "severity": "Low",
       "likelihood": "Low"
     }
   ]

@@ -50,12 +50,12 @@
     {
       "id": "5",
       "function": "AaveOracle.getAssetPrice",
-      "impact": "Critical",
+      "impact": "High",
       "governance": {
         "functionType": "Dependency",
         "name": "chainlink"
       },
-      "severity": "High",
+      "severity": "Low",
       "likelihood": "Low"
     }
   ]

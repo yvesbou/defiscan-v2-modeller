@@ -4,7 +4,7 @@
     {
       "id": "1",
       "function": "PriceFeed.fetchPrice",
-      "impact": "Critical",
+      "impact": "High",
       "governance": {
         "functionType": "Dependency",
         "name": "chainlink_tellor"

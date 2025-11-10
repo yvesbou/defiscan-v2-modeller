@@ -30,7 +30,7 @@
     {
       "id": "3",
       "function": "LitePSM.sellGem",
-      "impact": "Critical",
+      "impact": "High",
       "governance": {
         "functionType": "Dependency",
         "name": "usdc"

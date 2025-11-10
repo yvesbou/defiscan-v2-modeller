@@ -17,12 +17,12 @@
     {
       "id": "2",
       "function": "Proxy(Comet).getPrice",
-      "impact": "Critical",
+      "impact": "High",
       "governance": {
         "functionType": "Dependency",
         "name": "chainlink"
       },
-      "severity": "Medium",
+      "severity": "Low",
       "likelihood": "Low"
     }
   ]
