@@ -1,5 +1,6 @@
 import { FunctionClassificationTable } from "@/lib/types";
 import aaveV3 from "./aave-v3.json";
+import gho from "./gho.json";
 import spark from "./spark.json";
 import compoundv3 from "./compoundv3.json";
 import morpho from "./morpho.json";
@@ -19,51 +20,56 @@ export const DEFAULT_PROJECTS: FunctionClassificationTable[] = [
   },
   {
     id: "2",
+    title: gho.title,
+    entries: gho.entries as any,
+  },
+  {
+    id: "3",
     title: morpho.title,
     entries: morpho.entries as any,
   },
   {
-    id: "3",
+    id: "4",
     title: uniswapV3.title,
     entries: uniswapV3.entries as any,
   },
   {
-    id: "4",
+    id: "5",
     title: liquityV1.title,
     entries: liquityV1.entries as any,
   },
   {
-    id: "5",
+    id: "6",
     title: aerodrome.title,
     entries: aerodrome.entries as any,
   },
   {
-    id: "6",
+    id: "7",
     title: spark.title,
     entries: spark.entries as any,
   },
   {
-    id: "7",
+    id: "8",
     title: compoundv3.title,
     entries: compoundv3.entries as any,
   },
   {
-    id: "8",
+    id: "9",
     title: sky.title,
     entries: sky.entries as any,
   },
   {
-    id: "9",
+    id: "10",
     title: pendlev2.title,
     entries: pendlev2.entries as any,
   },
   {
-    id: "10",
+    id: "11",
     title: curve.title,
     entries: curve.entries as any,
   },
   {
-    id: "10",
+    id: "12",
     title: crvUSD.title,
     entries: crvUSD.entries as any,
   },
