@@ -1,0 +1,55 @@
+{
+  "title": "GHO",
+  "entries": [
+    {
+      "id": "1",
+      "function": "Proxy(GSM).upgradeTo",
+      "impact": "Low",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "voting",
+        "votingDelayDays": 5,
+        "requiredVoters": 4
+      },
+      "severity": "Informational",
+      "likelihood": "Mitigated"
+    },
+    {
+      "id": "2",
+      "function": "GhoDirectMinter.mintAndSupply",
+      "impact": "Low",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "multisig"
+      },
+      "severity": "Low",
+      "likelihood": "Mitigated"
+    },
+    {
+      "id": "3",
+      "function": "Proxy(AToken).upgradeTo",
+      "impact": "Low",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "voting",
+        "votingDelayDays": 5,
+        "requiredVoters": 4
+      },
+      "severity": "Informational",
+      "likelihood": "Mitigated"
+    },
+    {
+      "id": "4",
+      "function": "UpgradeableLockReleaseTokenPool.upgradeTo",
+      "impact": "High",
+      "governance": {
+        "functionType": "Admin",
+        "governanceType": "voting",
+        "votingDelayDays": 5,
+        "requiredVoters": 4
+      },
+      "severity": "Informational",
+      "likelihood": "Mitigated"
+    }
+  ]
+}
